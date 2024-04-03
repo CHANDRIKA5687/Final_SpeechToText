@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speech Recognition</title>
+</head>
+<body>
+    <script>
+        const recognition = new webkitSpeechRecognition();
+        recognition.continuous = true;
+        recognition.interimResults = true;
+        recognition.lang = 'en-US';
+
+        recognition.onresult = function (event) {
+            const result = event.results[event.results.length - 1][0].transcript;
+            sendTranscript(result);
+        };
+
+        recognition.start();
+
+        function sendTranscript(transcript) {
+            const ws = new WebSocket('ws://localhost:8501/stream');
+            ws.onopen = function () {
+                ws.send(JSON.stringify({ transcript: transcript }));
+            };
+        }
+    </script>
+</body>
+</html>

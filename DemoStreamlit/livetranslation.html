@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speech to Text</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> 
+    <style>
+       
+.navbar-nav {
+    display: flex;
+    justify-content: space-between;
+    width: 45%; /* Ensure links stretch across the entire width */
+}
+
+.navbar-nav .nav-item {
+    flex: 1; /* Distribute the space evenly among nav items */
+    text-align: center; /* Center align the text */
+}
+
+        /* Change link color on hover */
+        .navbar-nav .nav-link:hover {
+            color: #ffa500; /* Orange color on hover */
+        }
+
+        /* Toggle button */
+        .navbar-toggler-icon {
+            background-color: #fff; /* White background color */
+        }
+
+        /* Background color of navbar */
+        .navbar {
+            background-color: #4e0707; /* Blue background color */
+        }
+
+        /* Background image for body */
+        body {
+            background-image: url('path/to/your/image.jpg'); /* Specify the path to your image */
+            background-size: cover; /* Cover the entire background */
+            background-position: center; /* Center the background image */
+        }
+    </style>
+</head>
+<body background="img.jpg">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light ">
+        <a class="navbar-brand" href="#"style="color: orange;">Transcriber</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="index.html" style="color: #fefefe; transition: rgb(214, 133, 82) 0.3s;">Live Transcribe</a>
+                </li>
+                
+                <li class="nav-item">
+                    <a class="nav-link" href="FileTranscriber.html"style="color: #fefefe; transition: rgb(214, 133, 82) 0.3s;">File Transcribe</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#"style="color: #fefefe; transition: rgb(214, 133, 82) 0.3s;">Meetup</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#"style="color: #fefefe; transition: rgb(214, 133, 82) 0.3s;">About Us</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#"style="color: #fefefe; transition: rgb(214, 133, 82) 0.3s;">Contact Us</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+<br><br>
+    <!-- Content -->
+    <div class="container mt-5"style="background-color: #ccc; margin-top: 20%;
+    margin-left: 15%;
+    margin-right: 10%;
+    margin-bottom: 15%;
+    background-color: #ccc; /* Gray background color */
+    padding: 15px; /* Padding around the form */
+    padding: bottom 20px;
+    border-radius: 10px; /* Rounded corners */
+">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h3>Speak here, By starting record......</h3>
+                <br>
+                <button id="startBtn" class="btn btn-primary">Start Recognition</button>
+                <button id="stopBtn" class="btn btn-danger" style="display:none;">Stop Recognition</button>
+            </div>
+        </div>
+        <div class="row mt-5">
+            <div class="col-md-12 text-center">
+                <p id="transcription" style="font-size: 24px;"></p>
+                <input type="text" id="editTextBox" class="form-control" placeholder="Edit Transcription">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 text-center btn-group">
+                <button id="editBtn" class="btn btn-secondary">Edit Text</button>
+                <button id="clearBtn" class="btn btn-secondary">Clear Text</button>
+                <button id="downloadBtn" class="btn btn-secondary">Download Text</button>
+            </div>
+        </div>
+        <br><br><br><br><br>
+    </div>
+
+    <script>
+        const recognition = new window.webkitSpeechRecognition(); // Create a speech recognition object
+        recognition.continuous = true; // Set continuous listening
+        recognition.lang = 'en-US'; // Set language (English-US)
+
+        recognition.onstart = () => {
+            console.log('Speech recognition started');
+            document.getElementById('startBtn').style.display = 'none'; // Hide start button
+            document.getElementById('stopBtn').style.display = 'inline-block'; // Show stop button
+        };
+
+        recognition.onend = () => {
+            console.log('Speech recognition ended');
+            document.getElementById('startBtn').style.display = 'inline-block'; // Show start button
+            document.getElementById('stopBtn').style.display = 'none'; // Hide stop button
+        };
+
+        recognition.onresult = (event) => {
+            const result = event.results[event.results.length - 1][0].transcript; // Get the latest transcription
+            document.getElementById('transcription').innerText = result; // Display the transcription
+        };
+
+        recognition.onerror = (event) => {
+            console.error('Speech recognition error:', event.error);
+        };
+
+        document.getElementById('startBtn').addEventListener('click', () => {
+            recognition.start(); // Start speech recognition
+        });
+
+        document.getElementById('stopBtn').addEventListener('click', () => {
+            recognition.stop(); // Stop speech recognition
+        });
+
+        document.getElementById('editBtn').addEventListener('click', () => {
+            // Show the text input for editing
+            document.getElementById('editTextBox').value = document.getElementById('transcription').innerText;
+            document.getElementById('transcription').style.display = 'none';
+            document.getElementById('editTextBox').style.display = 'block';
+        });
+
+        document.getElementById('clearBtn').addEventListener('click', () => {
+            // Clear the displayed text
+            document.getElementById('transcription').innerText = '';
+            document.getElementById('transcription').style.display = 'block';
+            document.getElementById('editTextBox').style.display = 'none';
+        });
+
+        document.getElementById('downloadBtn').addEventListener('click', () => {
+            // Download the text content as a text file
+            const textContent = document.getElementById('transcription').innerText;
+            const blob = new Blob([textContent], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'transcription.txt';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        });
+    </script>
+</body>
+</html>

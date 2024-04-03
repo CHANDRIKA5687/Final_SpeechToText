@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speech to Text</title>
+    <style>
+        /* Add your CSS styles here */
+        #transcriptionResult {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
+    <!-- Add your HTML content here -->
+    <h1>Speech to Text Converter</h1>
+    <button id="liveTranscriptionBtn">Live Transcription</button>
+    <input type="file" id="fileInput">
+    <button id="fileTranscriptionBtn">File Transcription</button>
+    <div id="transcriptionResult"></div>
+
+    <script>
+        document.getElementById('liveTranscriptionBtn').addEventListener('click', startLiveTranscription);
+
+        function startLiveTranscription() {
+            // Code to start live transcription
+            // This could involve using Web Speech API or any other appropriate library
+            // For this demo, we'll just display a message
+            document.getElementById('transcriptionResult').innerText = "Live transcription is not supported in this demo.";
+        }
+
+        document.getElementById('fileTranscriptionBtn').addEventListener('click', () => {
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+            if (file) {
+                // Code to transcribe the file
+                // For this demo, we'll just display a message
+                document.getElementById('transcriptionResult').innerText = "File transcription is not supported in this demo.";
+            } else {
+                alert('Please select a file.');
+            }
+        });
+    </script>
+</body>
+</html>
